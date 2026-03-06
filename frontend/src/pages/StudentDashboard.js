@@ -29,7 +29,7 @@ function StudentDashboard() {
     const parsedStudent = JSON.parse(storedStudent);
     setStudent(parsedStudent);
 
-    axios.post('http://localhost:5000/api/transactions/my-books', { studentId: parsedStudent._id })
+    axios.post('https://hostel-library-book-management.onrender.com/api/transactions/my-books', { studentId: parsedStudent._id })
       .then(res => setMyBooks(res.data))
       .catch(err => console.log(err));
 
@@ -38,7 +38,7 @@ function StudentDashboard() {
   const handleSearch = async () => {
       if(!searchQuery) return;
       try {
-          const res = await axios.get(`http://localhost:5000/api/books/search?q=${searchQuery}`);
+          const res = await axios.get(`https://hostel-library-book-management.onrender.com/api/books/search?q=${searchQuery}`);
           setSearchResults(res.data);
           setHasSearched(true);
       } catch (err) { console.log(err); }

@@ -20,7 +20,7 @@ function ForgotPassword() {
 
   const handleReset = async () => {
     try {
-      await axios.post('http://localhost:5000/api/auth/reset-password', data);
+      await axios.post('https://hostel-library-book-management.onrender.com/api/auth/reset-password', data);
       alert('Password Reset Successful! Please Login.');
       navigate('/');
     } catch (err) {

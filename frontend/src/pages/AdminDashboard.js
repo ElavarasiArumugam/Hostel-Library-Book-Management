@@ -72,26 +72,26 @@ function AdminDashboard() {
 
   const loadStats = async () => {
       try {
-          const res = await axios.get('http://localhost:5000/api/transactions/report');
+          const res = await axios.get('https://hostel-library-book-management.onrender.com/api/transactions/report');
           setStats({ totalBooks: res.data.totalBooks, issuedBooks: res.data.issuedBooks, returnedBooks: 0, totalStudents: res.data.totalStudents });
       } catch (err) { console.log(err); }
   };
 
   const fetchAllData = async () => {
       try {
-          const resStudents = await axios.get('http://localhost:5000/api/auth/all-students');
+          const resStudents = await axios.get('https://hostel-library-book-management.onrender.com/api/auth/all-students');
           setAllStudents(resStudents.data);
           
-          const resAdmins = await axios.get('http://localhost:5000/api/auth/all-admins');
+          const resAdmins = await axios.get('https://hostel-library-book-management.onrender.com/api/auth/all-admins');
           setAllAdmins(resAdmins.data);
 
-          const resTrans = await axios.get('http://localhost:5000/api/transactions/all-history');
+          const resTrans = await axios.get('https://hostel-library-book-management.onrender.com/api/transactions/all-history');
           
           // 🟢 SAFETY FIX: Filter out "Ghost" transactions where the student or book was deleted
           const validTransactions = resTrans.data.filter(t => t.bookId && t.studentId);
           setAllTransactions(validTransactions);
 
-          const resBooks = await axios.get('http://localhost:5000/api/books/search?q=');
+          const resBooks = await axios.get('https://hostel-library-book-management.onrender.com/api/books/search?q=');
           setAllBooks(resBooks.data);
 
           const overdue = validTransactions.filter(t => t.status === 'Issued' && new Date() > new Date(t.dueDate));
@@ -105,7 +105,7 @@ function AdminDashboard() {
   const handleCreateAdmin = async () => {
       if (!newAdmin.gender) return alert("Please select gender");
       try {
-          await axios.post('http://localhost:5000/api/auth/create-admin', newAdmin);
+          await axios.post('https://hostel-library-book-management.onrender.com/api/auth/create-admin', newAdmin);
           alert("New Admin created successfully!");
           setNewAdmin({ name: '', rollNo: '', password: '', gender: '' });
       } catch (err) { alert(err.response?.data || "Error creating admin"); }
@@ -114,7 +114,7 @@ function AdminDashboard() {
   const handleDeleteUser = async (id, type) => {
       if(window.confirm(`Are you sure you want to delete this ${type}?`)) {
           try {
-              await axios.delete(`http://localhost:5000/api/auth/delete/${id}`);
+              await axios.delete(`https://hostel-library-book-management.onrender.com/api/auth/delete/${id}`);
               alert(`${type} Deleted`);
               fetchAllData(); 
           } catch(err) { alert(`Error deleting ${type}`); }
@@ -124,7 +124,7 @@ function AdminDashboard() {
   const handleIssue = async () => {
     setMessage({ type: '', text: '' });
     try {
-        const res = await axios.post('http://localhost:5000/api/transactions/issue-direct', issueData);
+        const res = await axios.post('https://hostel-library-book-management.onrender.com/api/transactions/issue-direct', issueData);
         setMessage({ type: 'success', text: `✅ Issued "${res.data.book}" to ${res.data.student}` });
         setIssueData({ rollNo: '', accessionNumber: '' });
         loadStats(); fetchAllData();
@@ -134,7 +134,7 @@ function AdminDashboard() {
   const handleReturn = async () => {
     setMessage({ type: '', text: '' });
     try {
-        const res = await axios.post('http://localhost:5000/api/transactions/return-direct', { accessionNumber: returnAccession });
+        const res = await axios.post('https://hostel-library-book-management.onrender.com/api/transactions/return-direct', { accessionNumber: returnAccession });
         setMessage({ type: 'success', text: `✅ Returned "${res.data.book}" from ${res.data.student}` });
         setReturnAccession(''); 
     } catch (err) { setMessage({ type: 'error', text: err.response?.data?.message || "Error returning book" }); }
@@ -142,7 +142,7 @@ function AdminDashboard() {
 
   const handleAddBook = async () => {
     try {
-      await axios.post('http://localhost:5000/api/books/add', newBook);
+      await axios.post('https://hostel-library-book-management.onrender.com/api/books/add', newBook);
       alert('Book Added!');
       setNewBook({ accessionNumber: '', title: '', author: '', totalCopies: 1 });
     } catch (err) { alert('Error adding book'); }
@@ -407,9 +407,9 @@ function AdminDashboard() {
                           <TextField label="Enter Student Roll Number (10 Digits)" fullWidth value={studentSearch} onChange={(e) => setStudentSearch(e.target.value)} />
                           <Button variant="contained" size="large" onClick={async () => {
                               try {
-                                  const res = await axios.get(`http://localhost:5000/api/auth/student/${studentSearch}`);
+                                  const res = await axios.get(`https://hostel-library-book-management.onrender.com/api/auth/student/${studentSearch}`);
                                   setStudentResult(res.data);
-                                  const resBooks = await axios.get(`http://localhost:5000/api/transactions/student-active/${res.data._id}`);
+                                  const resBooks = await axios.get(`https://hostel-library-book-management.onrender.com/api/transactions/student-active/${res.data._id}`);
                                   setStudentBooks(resBooks.data);
                               } catch (err) { alert("Student not found. Please check the Roll Number."); }
                           }}>Search</Button>
@@ -463,7 +463,7 @@ function AdminDashboard() {
                           <TextField label="Search by Book Title or Author" fullWidth value={bookQuery} onChange={(e) => setBookQuery(e.target.value)} />
                           <Button variant="contained" size="large" onClick={async () => { 
                               try { 
-                                  const res = await axios.get(`http://localhost:5000/api/books/search?q=${bookQuery}`); 
+                                  const res = await axios.get(`https://hostel-library-book-management.onrender.com/api/books/search?q=${bookQuery}`); 
                                   setBookResults(res.data); 
                                   setHasSearchedBooks(true); // 🟢 FLAG SET HERE
                               } catch (err) { console.log(err); } 

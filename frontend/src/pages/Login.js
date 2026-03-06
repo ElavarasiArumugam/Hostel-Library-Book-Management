@@ -18,7 +18,7 @@ function Login() {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { rollNo, password });
+      const res = await axios.post('https://hostel-library-book-management.onrender.com/api/auth/login', { rollNo, password });
       
       if (role === 'admin') {
         if (res.data.isAdmin) {
