@@ -44,7 +44,9 @@ function Register() {
       // Exclude confirmPassword from the data sent to the backend
       const { confirmPassword, ...submitData } = formData;
       
-      await axios.post('http://localhost:5000/api/auth/register', submitData);
+      // 🟢 FIXED: Live Render URL
+      await axios.post('https://hostel-library-book-management.onrender.com/api/auth/register', submitData);
+      
       alert("Registration Successful! Please Login.");
       navigate('/');
     } catch (err) { 
