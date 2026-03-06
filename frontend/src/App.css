@@ -27,6 +27,39 @@
 .App-link {
   color: #61dafb;
 }
+/* --- GLOBAL THEME & TYPOGRAPHY --- */
+body {
+  font-size: 16px; /* Mentor requested medium font size */
+}
+
+/* --- ECH NAVBAR STYLES --- */
+.ech-navbar {
+  background-color: #6E4B39; /* Official ECH Brown */
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  justify-content: space-between;
+}
+
+.ech-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ech-logo-container img {
+  height: 50px; /* Adjust based on your logo size */
+  background: white; /* Adds a nice white background to the logo */
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.ech-logo-container h1 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 600;
+}
 
 @keyframes App-logo-spin {
   from {

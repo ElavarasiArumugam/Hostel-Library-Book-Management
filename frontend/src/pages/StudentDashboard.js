@@ -10,7 +10,8 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import HomeIcon from '@mui/icons-material/Home';
 import SchoolIcon from '@mui/icons-material/School';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'; // For Year
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import PersonIcon from '@mui/icons-material/Person'; // 🟢 Added PersonIcon import
 
 function StudentDashboard() {
   const [student, setStudent] = useState(null);
@@ -47,20 +48,20 @@ function StudentDashboard() {
 
   // --- SIDEBAR ---
   const Sidebar = () => (
-      <Box sx={{ width: '250px', backgroundColor: '#2c3e50', color: 'white', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed', left: 0, top: 0 }}>
-          <div style={{ padding: '24px', fontSize: '1.5rem', fontWeight: 'bold', borderBottom: '1px solid #34495e', textAlign: 'center', backgroundColor: '#1a252f' }}>
+      <Box sx={{ width: '250px', backgroundColor: '#1976d2', color: 'white', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed', left: 0, top: 0 }}>
+          <div style={{ padding: '24px', fontSize: '1.5rem', fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.2)', textAlign: 'center', backgroundColor: '#1565c0' }}>
              Hostel Library
           </div>
           <List component="nav" sx={{ marginTop: '10px' }}>
-              <ListItem button onClick={() => setView('profile')} sx={{ backgroundColor: view === 'profile' ? '#34495e' : 'transparent', mb: 1, '&:hover': { bgcolor: '#3e5871' } }}>
+              <ListItem button onClick={() => setView('profile')} sx={{ backgroundColor: view === 'profile' ? 'rgba(255,255,255,0.2)' : 'transparent', mb: 1, '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }}>
                   <ListItemIcon sx={{ color: 'white' }}><DashboardIcon /></ListItemIcon>
                   <ListItemText primary="My Profile" />
               </ListItem>
-              <ListItem button onClick={() => setView('myBooks')} sx={{ backgroundColor: view === 'myBooks' ? '#34495e' : 'transparent', mb: 1, '&:hover': { bgcolor: '#3e5871' } }}>
+              <ListItem button onClick={() => setView('myBooks')} sx={{ backgroundColor: view === 'myBooks' ? 'rgba(255,255,255,0.2)' : 'transparent', mb: 1, '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }}>
                   <ListItemIcon sx={{ color: 'white' }}><MenuBookIcon /></ListItemIcon>
                   <ListItemText primary="Borrowed Books" />
               </ListItem>
-              <ListItem button onClick={() => setView('search')} sx={{ backgroundColor: view === 'search' ? '#34495e' : 'transparent', '&:hover': { bgcolor: '#3e5871' } }}>
+              <ListItem button onClick={() => setView('search')} sx={{ backgroundColor: view === 'search' ? 'rgba(255,255,255,0.2)' : 'transparent', '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }}>
                   <ListItemIcon sx={{ color: 'white' }}><SearchIcon /></ListItemIcon>
                   <ListItemText primary="Search Library" />
               </ListItem>
@@ -86,8 +87,8 @@ function StudentDashboard() {
                   <Paper elevation={6} sx={{ width: '100%', borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
                       
                       {/* LEFT SIDE (BLUE) */}
-                      <Box sx={{ width: { xs: '100%', md: '35%' }, backgroundColor: '#1565c0', color: 'white', padding: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                          <Avatar sx={{ width: 140, height: 140, border: '4px solid white', fontSize: '3.5rem', bgcolor: '#0d47a1', marginBottom: '20px' }}>
+                      <Box sx={{ width: { xs: '100%', md: '35%' }, backgroundColor: '#1976d2', color: 'white', padding: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+                          <Avatar sx={{ width: 140, height: 140, border: '4px solid white', fontSize: '3.5rem', bgcolor: '#1565c0', marginBottom: '20px' }}>
                               {student.name.charAt(0)}
                           </Avatar>
                           <Typography variant="h5" sx={{ fontWeight: 'bold' }}>{student.name}</Typography>
@@ -107,6 +108,15 @@ function StudentDashboard() {
                                       <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 'bold' }}>DEPARTMENT</Typography>
                                   </Box>
                                   <Typography variant="body1" sx={{ fontWeight: '500' }}>{student.department}</Typography>
+                              </Grid>
+                              
+                              {/* 🟢 GENDER ADDED HERE */}
+                              <Grid item xs={12} sm={6}>
+                                  <Box display="flex" alignItems="center" mb={1}>
+                                      <PersonIcon color="action" sx={{ mr: 1, fontSize: 20 }} />
+                                      <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 'bold' }}>GENDER</Typography>
+                                  </Box>
+                                  <Typography variant="body1" sx={{ fontWeight: '500' }}>{student.gender}</Typography>
                               </Grid>
 
                               <Grid item xs={12} sm={6}>
