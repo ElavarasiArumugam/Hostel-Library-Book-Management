@@ -52,7 +52,7 @@ function Login() {
 
       <Container maxWidth="xs" sx={{ mt: 8, mb: 8, flexGrow: 1 }}>
         <Paper elevation={6} sx={{ padding: '30px', textAlign: 'center', borderRadius: '15px', backgroundColor: '#f0f4f8', borderTop: '6px solid #1976d2' }}>
-          <Typography variant="h5" gutterBottom color="primary" sx={{ fontWeight: 'bold' }}>Library Portal</Typography>
+          <Typography variant="h5" gutterBottom color="primary" sx={{ fontWeight: 'bold' }}>Login</Typography>
           
           <ToggleButtonGroup value={role} exclusive onChange={(e, newRole) => { if (newRole) setRole(newRole); }} sx={{ marginBottom: '20px', width: '100%', backgroundColor: 'white' }}>
             <ToggleButton value="student" sx={{ width: '50%', fontWeight: 'bold' }}>Student</ToggleButton>

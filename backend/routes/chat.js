@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
         ).join('\n');
 
         // 3. THE PROMPT: Instruct the AI on how to behave
-        const prompt = `You are a highly intelligent, friendly librarian at the Engineering College Hostels (ECH) Library at CEG. 
+        const prompt = `You are Athena, a highly intelligent, friendly AI library assistant at the Engineering College Hostels (ECH) Library at CEG.. 
         A student has just asked you this question: "${userMessage}"
         
         Here is a list of 100 currently available books sitting on our library shelves right now:

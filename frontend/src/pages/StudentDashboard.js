@@ -35,7 +35,7 @@ function StudentDashboard() {
   // --- 🟢 AI CHATBOT STATES ---
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
-  const [chatMessages, setChatMessages] = useState([{ sender: 'bot', text: "Hi! I am the CEG Library AI. I can recommend books based on your interests. What are you looking for today?" }]);
+   const [chatMessages, setChatMessages] = useState([{ sender: 'bot', text: "Hi! I am Athena, your personal library assistant. What kind of books are you looking for today?" }]);
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
@@ -277,7 +277,7 @@ function StudentDashboard() {
                       
                       {/* Chat Header */}
                       <Box sx={{ backgroundColor: '#1976d2', color: 'white', p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>✨ CEG Library AI</Typography>
+                          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>✨ Athena</Typography>
                           <IconButton size="small" sx={{ color: 'white' }} onClick={() => setIsChatOpen(false)}><CloseIcon /></IconButton>
                       </Box>
 
