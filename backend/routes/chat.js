@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
 
         // 1. Initialize Gemini using the key from your .env file
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         // 2. THE "RAG" RETRIEVAL: Fetch 100 random, currently available books from your DB
         const availableBooks = await Book.aggregate([
