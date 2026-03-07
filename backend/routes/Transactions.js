@@ -8,25 +8,35 @@ router.post('/issue-direct', async (req, res) => {
     try {
         const { rollNo, accessionNumber } = req.body;
 
-        // Find Student
+        // 1. Find the Student FIRST
         const student = await Student.findOne({ rollNo: { $regex: new RegExp("^" + rollNo + "$", "i") } });
         if (!student) return res.status(404).json({ message: "Student not found" });
 
-        // Find Book
+        // 2. 🟢 NEW RULE: Check if the student already has 4 active books
+        const activeBooksCount = await Transaction.countDocuments({ 
+            studentId: student._id, 
+            status: 'Issued' 
+        });
+
+        if (activeBooksCount >= 4) {
+            return res.status(400).json({ message: "Borrowing limit reached! Students can only borrow a maximum of 4 books at a time." });
+        }
+
+        // 3. Find Book
         const book = await Book.findOne({ accessionNumber: accessionNumber });
         if (!book) return res.status(404).json({ message: "Book not found with that Accession Number" });
         if (book.availableCopies < 1) return res.status(400).json({ message: "Book copy is currently unavailable (0 copies)" });
 
-        // Check if already borrowed
+        // 4. Check if already borrowed
         const existing = await Transaction.findOne({ studentId: student._id, bookId: book._id, status: "Issued" });
         if (existing) return res.status(400).json({ message: "Student already has this book issued!" });
 
-        // Create Transaction
+        // 5. Create Transaction
         const newTrans = new Transaction({
             studentId: student._id,
             bookId: book._id,
             dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), // Default 15 Days
-            status: 'Issued' // 🟢 FORCE STATUS
+            status: 'Issued'
         });
 
         await newTrans.save();
@@ -39,7 +49,7 @@ router.post('/issue-direct', async (req, res) => {
         });
 
     } catch (err) {
-        console.error("Issue Error:", err); // Log error for debugging
+        console.error("Issue Error:", err);
         res.status(500).json(err);
     }
 });

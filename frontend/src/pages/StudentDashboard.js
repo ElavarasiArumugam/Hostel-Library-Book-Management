@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Grid, Paper, Typography, Box, Avatar, Button, List, ListItem, ListItemIcon, ListItemText, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Alert, Chip } from '@mui/material';
+import { 
+    Container, Grid, Paper, Typography, Box, Avatar, Button, List, 
+    ListItem, ListItemIcon, ListItemText, TextField, Table, TableBody, 
+    TableCell, TableContainer, TableHead, TableRow, Alert, Chip,
+    Fab, CircularProgress, IconButton // 🟢 Added for Chatbot
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+
+// Icons
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SearchIcon from '@mui/icons-material/Search';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -11,7 +18,10 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import HomeIcon from '@mui/icons-material/Home';
 import SchoolIcon from '@mui/icons-material/School';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import PersonIcon from '@mui/icons-material/Person'; // 🟢 Added PersonIcon import
+import PersonIcon from '@mui/icons-material/Person';
+import ChatIcon from '@mui/icons-material/Chat'; // 🟢 Chat icon
+import CloseIcon from '@mui/icons-material/Close'; // 🟢 Close icon
+import SendIcon from '@mui/icons-material/Send'; // 🟢 Send icon
 
 function StudentDashboard() {
   const [student, setStudent] = useState(null);
@@ -21,6 +31,12 @@ function StudentDashboard() {
   const [searchResults, setSearchResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const navigate = useNavigate();
+
+  // --- 🟢 AI CHATBOT STATES ---
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState([{ sender: 'bot', text: "Hi! I am the CEG Library AI. I can recommend books based on your interests. What are you looking for today?" }]);
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     const storedStudent = localStorage.getItem('studentData');
@@ -42,6 +58,24 @@ function StudentDashboard() {
           setSearchResults(res.data);
           setHasSearched(true);
       } catch (err) { console.log(err); }
+  };
+
+  // --- 🟢 CHATBOT SEND MESSAGE LOGIC ---
+  const handleSendMessage = async () => {
+      if (!chatInput.trim()) return;
+      
+      const userMessage = chatInput;
+      setChatMessages(prev => [...prev, { sender: 'user', text: userMessage }]);
+      setChatInput("");
+      setIsTyping(true);
+
+      try {
+          const res = await axios.post('https://hostel-library-book-management.onrender.com/api/chat', { message: userMessage });
+          setChatMessages(prev => [...prev, { sender: 'bot', text: res.data.reply }]);
+      } catch (err) {
+          setChatMessages(prev => [...prev, { sender: 'bot', text: "Sorry, my AI connection is currently down!" }]);
+      }
+      setIsTyping(false);
   };
 
   if (!student) return <div>Loading...</div>;
@@ -79,7 +113,7 @@ function StudentDashboard() {
 
       <Box sx={{ marginLeft: '250px', width: '100%', padding: '40px' }}>
           
-          {/* 🟢 VIEW: PROFILE */}
+          {/* VIEW: PROFILE */}
           {view === 'profile' && (
               <Container maxWidth="md" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
                   
@@ -110,7 +144,6 @@ function StudentDashboard() {
                                   <Typography variant="body1" sx={{ fontWeight: '500' }}>{student.department}</Typography>
                               </Grid>
                               
-                              {/* 🟢 GENDER ADDED HERE */}
                               <Grid item xs={12} sm={6}>
                                   <Box display="flex" alignItems="center" mb={1}>
                                       <PersonIcon color="action" sx={{ mr: 1, fontSize: 20 }} />
@@ -154,7 +187,7 @@ function StudentDashboard() {
               </Container>
           )}
 
-          {/* 🔵 VIEW: MY BOOKS */}
+          {/* VIEW: MY BOOKS */}
           {view === 'myBooks' && (
               <Container maxWidth="lg">
                   <Typography variant="h4" sx={{ marginBottom: '30px', fontWeight: 'bold', color: '#333' }}>My Borrowed Books</Typography>
@@ -192,7 +225,7 @@ function StudentDashboard() {
               </Container>
           )}
 
-          {/* 🟠 VIEW: SEARCH BOOKS */}
+          {/* VIEW: SEARCH BOOKS */}
           {view === 'search' && (
               <Container maxWidth="lg">
                   <Typography variant="h4" sx={{ marginBottom: '30px', fontWeight: 'bold', color: '#333' }}>Search Library</Typography>
@@ -236,6 +269,43 @@ function StudentDashboard() {
                   )}
               </Container>
           )}
+
+          {/* 🟢 FLOATING AI CHATBOT WIDGET */}
+          <Box sx={{ position: 'fixed', bottom: 30, right: 30, zIndex: 1000 }}>
+              {isChatOpen && (
+                  <Paper elevation={6} sx={{ width: '350px', height: '450px', display: 'flex', flexDirection: 'column', borderRadius: '15px', overflow: 'hidden', mb: 2, border: '1px solid #1976d2' }}>
+                      
+                      {/* Chat Header */}
+                      <Box sx={{ backgroundColor: '#1976d2', color: 'white', p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>✨ CEG Library AI</Typography>
+                          <IconButton size="small" sx={{ color: 'white' }} onClick={() => setIsChatOpen(false)}><CloseIcon /></IconButton>
+                      </Box>
+
+                      {/* Chat Messages */}
+                      <Box sx={{ flexGrow: 1, p: 2, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 1, backgroundColor: '#f9f9f9' }}>
+                          {chatMessages.map((msg, i) => (
+                              <Box key={i} sx={{ alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', backgroundColor: msg.sender === 'user' ? '#1976d2' : '#e0e0e0', color: msg.sender === 'user' ? 'white' : 'black', p: 1.5, borderRadius: '10px', maxWidth: '80%' }}>
+                                  <Typography variant="body2">{msg.text}</Typography>
+                              </Box>
+                          ))}
+                          {isTyping && <CircularProgress size={20} sx={{ alignSelf: 'flex-start', ml: 1, mt: 1 }} />}
+                      </Box>
+
+                      {/* Chat Input */}
+                      <Box sx={{ p: 1, display: 'flex', borderTop: '1px solid #ddd', backgroundColor: 'white' }}>
+                          <TextField fullWidth size="small" placeholder="Ask for a book recommendation..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()} sx={{ mr: 1 }} />
+                          <Fab color="primary" size="small" onClick={handleSendMessage}><SendIcon fontSize="small" /></Fab>
+                      </Box>
+                  </Paper>
+              )}
+
+              {/* Chat Toggle Button */}
+              {!isChatOpen && (
+                  <Fab color="primary" onClick={() => setIsChatOpen(true)} sx={{ boxShadow: 4, width: 65, height: 65 }}>
+                      <ChatIcon fontSize="large" />
+                  </Fab>
+              )}
+          </Box>
 
       </Box>
     </div>

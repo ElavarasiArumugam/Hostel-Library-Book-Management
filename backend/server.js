@@ -6,6 +6,7 @@ const cors = require('cors');
 const authRoute = require('./routes/auth');
 const bookRoute = require('./routes/Books');
 const transactionRoute = require('./routes/Transactions');
+const chatRoute = require('./routes/chat');
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/auth', authRoute);
 app.use('/api/books', bookRoute);
 app.use('/api/transactions', transactionRoute);
+app.use('/api/chat', chatRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
