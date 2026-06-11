@@ -44,6 +44,15 @@ Instead of relying on standard AI, which can hallucinate books the library doesn
 3. **Response:** The AI acts as a digital librarian, recommending exact Accession Numbers for books the student can physically check out at that exact moment.
 
 ---
+## 🤝 The Team
+
+This project was developed collaboratively by a 3-person team. My specific role was leading the **Backend Architecture & AI Integration**.
+
+* **Elavarasi Arumugam (Me)** - Engineered the Node.js/Express backend, integrated the Google Gemini 2.5 RAG pipeline, managed the MongoDB Atlas cloud connection, and handled live deployment on Vercel and Render.
+* **Srivishnu** - Developed the React.js frontend Single Page Application and UI/UX styling using Material-UI.
+* **Vasanthavelan** - Designed the database schemas, managed data seeding for 2,500+ records, and handled QA testing.
+
+---
 
 ##  Local Installation & Setup
 
