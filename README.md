@@ -44,13 +44,25 @@ Instead of relying on standard AI, which can hallucinate books the library doesn
 3. **Response:** The AI acts as a digital librarian, recommending exact Accession Numbers for books the student can physically check out at that exact moment.
 
 ---
-## 🤝 The Team
+##  The Team
 
 This project was developed collaboratively by a 3-person team. My specific role was leading the **Backend Architecture & AI Integration**.
 
 * **Elavarasi Arumugam (Me)** - Engineered the Node.js/Express backend, integrated the Google Gemini 2.5 RAG pipeline, managed the MongoDB Atlas cloud connection, and handled live deployment on Vercel and Render.
 * **Srivishnu** - Developed the React.js frontend Single Page Application and UI/UX styling using Material-UI.
 * **Vasanthavelan** - Designed the database schemas, managed data seeding for 2,500+ records, and handled QA testing.
+
+---
+##  Live Demo &  Admin Access
+
+**Live Deployment:** [https://hostel-library-book-management.vercel.app/](https://hostel-library-book-management.vercel.app/)
+
+The system features role-based access control. For security reasons, live admin credentials are not public. If you are running this locally, you can create a test admin using the following dummy format in your database:
+
+**Super Admin / Admin Login Format:**
+* **Email:** `admin@ceg.edu` (Example)
+* **Password:** `admin123` (Example)
+
 
 ---
 
