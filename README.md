@@ -1,4 +1,4 @@
-# 📚 ECH Library Management System
+#  Hostel Library Management System
 
 ![MERN Stack](https://img.shields.io/badge/Stack-MERN-blue)
 ![AI](https://img.shields.io/badge/AI-Google%20Gemini%202.5-orange)
@@ -8,17 +8,17 @@ A fully cloud-native, intelligent Library Management System built for the Engine
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-* **🤖 Athena AI Chatbot (RAG Architecture):** Integrated with the Google Gemini 2.5 API. The chatbot actively queries the MongoDB database and cross-references user requests (e.g., "Find me a short philosophy book") with live inventory. It will *only* recommend books where `availableCopies > 0`.
-* **👥 Role-Based Access:** Secure, isolated dashboards for both Admins and Students to track borrowed books, overdue fines, and physical inventory.
-* **⚡ Lightning-Fast Search:** Utilizes backend MongoDB `$regex` algorithms to instantly search a seeded database of 2,500+ books without overloading the frontend client.
-* **📄 Dynamic PDF Reporting:** Generates official, branded college library reports dynamically on the frontend using `jsPDF` to save server processing power.
-* **☁️ Cloud-Deployed:** Hosted live with a React frontend on Vercel, a Node/Express backend on Render, and a MongoDB Atlas cluster.
+* ** Athena AI Chatbot (RAG Architecture):** Integrated with the Google Gemini 2.5 API. The chatbot actively queries the MongoDB database and cross-references user requests (e.g., "Find me a short philosophy book") with live inventory. It will *only* recommend books where `availableCopies > 0`.
+* ** Role-Based Access:** Secure, isolated dashboards for both Admins and Students to track borrowed books, overdue fines, and physical inventory.
+* ** Lightning-Fast Search:** Utilizes backend MongoDB `$regex` algorithms to instantly search a seeded database of 2,500+ books without overloading the frontend client.
+* ** Dynamic PDF Reporting:** Generates official, branded college library reports dynamically on the frontend using `jsPDF` to save server processing power.
+* ** Cloud-Deployed:** Hosted live with a React frontend on Vercel, a Node/Express backend on Render, and a MongoDB Atlas cluster.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 **Frontend (Client)**
 * React.js (Single Page Application)
@@ -37,7 +37,7 @@ A fully cloud-native, intelligent Library Management System built for the Engine
 
 ---
 
-## 🧠 System Architecture (How the AI Works)
+##  System Architecture (How the AI Works)
 Instead of relying on standard AI, which can hallucinate books the library doesn't own, this system implements a strict **Retrieval-Augmented Generation (RAG)** pipeline:
 1. **Retrieval:** When a student asks a question, the Node.js backend uses a MongoDB Aggregation Pipeline (`$match` and `$sample`) to pull exactly 100 books that are physically available on the shelves.
 2. **Generation:** This localized data is securely passed to the Gemini API as a strict context window.
@@ -45,11 +45,36 @@ Instead of relying on standard AI, which can hallucinate books the library doesn
 
 ---
 
-## 🚀 Local Installation & Setup
+##  Local Installation & Setup
 
 To run this project locally on your machine, follow these steps:
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/ElavarasiArumugam/Hostel-Library-Book-Management.git](https://github.com/ElavarasiArumugam/Hostel-Library-Book-Management.git)
+git clone https://github.com/ElavarasiArumugam/Hostel-Library-Book-Management.git
 cd Hostel-Library-Book-Management
+2. Backend Setup
+Bash
+cd backend
+npm install
+Create a .env file inside the backend folder and add your secret keys:
+
+Code snippet
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+GEMINI_API_KEY=your_google_gemini_api_key
+Start the backend server:
+
+Bash
+node server.js
+3. Frontend Setup
+Open a new terminal window:
+
+Bash
+cd frontend
+npm install
+Start the React development server:
+
+Bash
+npm start
+The application will now be running on http://localhost:3000.
