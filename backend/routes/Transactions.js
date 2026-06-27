@@ -12,7 +12,24 @@ router.post('/issue-direct', async (req, res) => {
         const student = await Student.findOne({ rollNo: { $regex: new RegExp("^" + rollNo + "$", "i") } });
         if (!student) return res.status(404).json({ message: "Student not found" });
 
-        // 2. 🟢 NEW RULE: Check if the student already has 4 active books
+        // 🟢 NEW RULE 1: Enforce Alumni Status (Block borrowings if > 4th Year)
+        const admissionYear = parseInt(rollNo.substring(0, 4)); // Extract admission year (e.g., 2023)
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth(); // 0 = Jan, 5 = June
+        
+        let academicYear = currentYear - admissionYear;
+        if (currentMonth >= 5) {
+            academicYear += 1;
+        }
+
+        if (academicYear > 4) {
+            return res.status(403).json({ 
+                message: "Access Denied: Alumni status reached. You must return all books and cannot borrow new ones." 
+            });
+        }
+
+        // 2. CHECK RULE: Check if the student already has 4 active books
         const activeBooksCount = await Transaction.countDocuments({ 
             studentId: student._id, 
             status: 'Issued' 

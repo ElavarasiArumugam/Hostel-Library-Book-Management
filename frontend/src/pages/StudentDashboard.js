@@ -4,7 +4,7 @@ import {
     Container, Grid, Paper, Typography, Box, Avatar, Button, List, 
     ListItem, ListItemIcon, ListItemText, TextField, Table, TableBody, 
     TableCell, TableContainer, TableHead, TableRow, Alert, Chip,
-    Fab, CircularProgress, IconButton // 🟢 Added for Chatbot
+    Fab, CircularProgress, IconButton 
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,9 +19,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import SchoolIcon from '@mui/icons-material/School';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PersonIcon from '@mui/icons-material/Person';
-import ChatIcon from '@mui/icons-material/Chat'; // 🟢 Chat icon
-import CloseIcon from '@mui/icons-material/Close'; // 🟢 Close icon
-import SendIcon from '@mui/icons-material/Send'; // 🟢 Send icon
+import ChatIcon from '@mui/icons-material/Chat'; 
+import CloseIcon from '@mui/icons-material/Close'; 
+import SendIcon from '@mui/icons-material/Send'; 
 
 function StudentDashboard() {
   const [student, setStudent] = useState(null);
@@ -35,7 +35,7 @@ function StudentDashboard() {
   // --- 🟢 AI CHATBOT STATES ---
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
-   const [chatMessages, setChatMessages] = useState([{ sender: 'bot', text: "Hi! I am Athena, your personal library assistant. What kind of books are you looking for today?" }]);
+  const [chatMessages, setChatMessages] = useState([{ sender: 'bot', text: "Hi! I am Athena, your personal library assistant. What kind of books are you looking for today?" }]);
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function StudentDashboard() {
     const parsedStudent = JSON.parse(storedStudent);
     setStudent(parsedStudent);
 
-    axios.post('https://hostel-library-book-management.onrender.com/api/transactions/my-books', { studentId: parsedStudent._id })
+    axios.post('https://hostel-library-book-management-1.onrender.com/api/transactions/my-books', { studentId: parsedStudent._id })
       .then(res => setMyBooks(res.data))
       .catch(err => console.log(err));
 
@@ -54,13 +54,12 @@ function StudentDashboard() {
   const handleSearch = async () => {
       if(!searchQuery) return;
       try {
-          const res = await axios.get(`https://hostel-library-book-management.onrender.com/api/books/search?q=${searchQuery}`);
+          const res = await axios.get(`https://hostel-library-book-management-1.onrender.com/api/books/search?q=${searchQuery}`);
           setSearchResults(res.data);
           setHasSearched(true);
       } catch (err) { console.log(err); }
   };
 
-  // --- 🟢 CHATBOT SEND MESSAGE LOGIC ---
   const handleSendMessage = async () => {
       if (!chatInput.trim()) return;
       
@@ -70,7 +69,7 @@ function StudentDashboard() {
       setIsTyping(true);
 
       try {
-          const res = await axios.post('https://hostel-library-book-management.onrender.com/api/chat', { message: userMessage });
+          const res = await axios.post('https://hostel-library-book-management-1.onrender.com/api/chat', { message: userMessage });
           setChatMessages(prev => [...prev, { sender: 'bot', text: res.data.reply }]);
       } catch (err) {
           setChatMessages(prev => [...prev, { sender: 'bot', text: "Sorry, my AI connection is currently down!" }]);
@@ -78,9 +77,35 @@ function StudentDashboard() {
       setIsTyping(false);
   };
 
+  // --- 🟢 NEW DYNAMIC YEAR FUNCTION ---
+  const getDynamicAcademicYear = (rollNo) => {
+    if (!rollNo || rollNo.length < 4) return "Unknown";
+    
+    // Extracts the first 4 digits of the CEG Roll No (e.g., 2023 from 2023115096)
+    const admissionYear = parseInt(rollNo.substring(0, 4)); 
+    
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); // 0 is Jan, 5 is June
+
+    let yearNumber = currentYear - admissionYear;
+    
+    // If we are in June or later, increment the year automatically
+    if (currentMonth >= 5) {
+      yearNumber += 1;
+    }
+
+    if (yearNumber === 1) return "1st Year";
+    if (yearNumber === 2) return "2nd Year";
+    if (yearNumber === 3) return "3rd Year";
+    if (yearNumber === 4) return "4th Year";
+    return "Alumni"; 
+  };
+
   if (!student) return <div>Loading...</div>;
 
-  // --- SIDEBAR ---
+  const dynamicYear = getDynamicAcademicYear(student.rollNo);
+
   const Sidebar = () => (
       <Box sx={{ width: '250px', backgroundColor: '#1976d2', color: 'white', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed', left: 0, top: 0 }}>
           <div style={{ padding: '24px', fontSize: '1.5rem', fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.2)', textAlign: 'center', backgroundColor: '#1565c0' }}>
@@ -115,9 +140,15 @@ function StudentDashboard() {
           
           {/* VIEW: PROFILE */}
           {view === 'profile' && (
-              <Container maxWidth="md" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+              <Container maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
                   
-                  {/* UNIFIED CARD */}
+                  {/* 🟢 ALUMNI WARNING BANNER */}
+                  {dynamicYear === 'Alumni' && (
+                      <Alert severity="error" sx={{ width: '100%', mb: 3, borderRadius: '10px', fontSize: '1.1rem', fontWeight: 'bold' }}>
+                          ⚠️ Alumni Account Status: You have completed your 4th year. Borrowing privileges are disabled. Please return all pending books.
+                      </Alert>
+                  )}
+
                   <Paper elevation={6} sx={{ width: '100%', borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
                       
                       {/* LEFT SIDE (BLUE) */}
@@ -127,7 +158,12 @@ function StudentDashboard() {
                           </Avatar>
                           <Typography variant="h5" sx={{ fontWeight: 'bold' }}>{student.name}</Typography>
                           <Typography variant="subtitle1" sx={{ opacity: 0.8, marginBottom: '20px' }}>{student.rollNo}</Typography>
-                          <Chip label="Active Student" sx={{ backgroundColor: 'rgba(255,255,255,0.25)', color: 'white', fontWeight: 'bold' }} />
+                          
+                          {/* Dynamically update the chip based on alumni status */}
+                          <Chip 
+                              label={dynamicYear === 'Alumni' ? 'Alumni' : 'Active Student'} 
+                              sx={{ backgroundColor: dynamicYear === 'Alumni' ? '#d32f2f' : 'rgba(255,255,255,0.25)', color: 'white', fontWeight: 'bold' }} 
+                          />
                       </Box>
 
                       {/* RIGHT SIDE (WHITE) */}
@@ -157,7 +193,10 @@ function StudentDashboard() {
                                       <CalendarTodayIcon color="action" sx={{ mr: 1, fontSize: 20 }} />
                                       <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 'bold' }}>YEAR OF STUDY</Typography>
                                   </Box>
-                                  <Typography variant="body1" sx={{ fontWeight: '500' }}>{student.year}</Typography>
+                                  {/* 🟢 Replaced static year with dynamicYear */}
+                                  <Typography variant="body1" sx={{ fontWeight: '500', color: dynamicYear === 'Alumni' ? 'red' : 'inherit' }}>
+                                      {dynamicYear}
+                                  </Typography>
                               </Grid>
 
                               <Grid item xs={12} sm={6}>
@@ -275,13 +314,11 @@ function StudentDashboard() {
               {isChatOpen && (
                   <Paper elevation={6} sx={{ width: '350px', height: '450px', display: 'flex', flexDirection: 'column', borderRadius: '15px', overflow: 'hidden', mb: 2, border: '1px solid #1976d2' }}>
                       
-                      {/* Chat Header */}
                       <Box sx={{ backgroundColor: '#1976d2', color: 'white', p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>✨ Athena</Typography>
                           <IconButton size="small" sx={{ color: 'white' }} onClick={() => setIsChatOpen(false)}><CloseIcon /></IconButton>
                       </Box>
 
-                      {/* Chat Messages */}
                       <Box sx={{ flexGrow: 1, p: 2, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 1, backgroundColor: '#f9f9f9' }}>
                           {chatMessages.map((msg, i) => (
                               <Box key={i} sx={{ alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', backgroundColor: msg.sender === 'user' ? '#1976d2' : '#e0e0e0', color: msg.sender === 'user' ? 'white' : 'black', p: 1.5, borderRadius: '10px', maxWidth: '80%' }}>
@@ -291,7 +328,6 @@ function StudentDashboard() {
                           {isTyping && <CircularProgress size={20} sx={{ alignSelf: 'flex-start', ml: 1, mt: 1 }} />}
                       </Box>
 
-                      {/* Chat Input */}
                       <Box sx={{ p: 1, display: 'flex', borderTop: '1px solid #ddd', backgroundColor: 'white' }}>
                           <TextField fullWidth size="small" placeholder="Ask for a book recommendation..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()} sx={{ mr: 1 }} />
                           <Fab color="primary" size="small" onClick={handleSendMessage}><SendIcon fontSize="small" /></Fab>
@@ -299,7 +335,6 @@ function StudentDashboard() {
                   </Paper>
               )}
 
-              {/* Chat Toggle Button */}
               {!isChatOpen && (
                   <Fab color="primary" onClick={() => setIsChatOpen(true)} sx={{ boxShadow: 4, width: 65, height: 65 }}>
                       <ChatIcon fontSize="large" />

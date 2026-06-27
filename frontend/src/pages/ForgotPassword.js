@@ -20,7 +20,7 @@ function ForgotPassword() {
 
   const handleReset = async () => {
     try {
-      await axios.post('https://hostel-library-book-management.onrender.com/api/auth/reset-password', data);
+      await axios.post('https://hostel-library-book-management-1.onrender.com/api/auth/reset-password', data);
       alert('Password Reset Successful! Please Login.');
       navigate('/');
     } catch (err) {
@@ -29,7 +29,7 @@ function ForgotPassword() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#eef2f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#85baf0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Container maxWidth="xs">
         <Paper elevation={6} sx={{ padding: '30px', borderRadius: '15px', borderTop: '6px solid #1976d2' }}>
           <Typography variant="h5" align="center" gutterBottom color="primary" sx={{ fontWeight: 'bold' }}>Reset Password</Typography>

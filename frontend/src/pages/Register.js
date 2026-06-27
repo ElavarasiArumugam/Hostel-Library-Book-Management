@@ -45,7 +45,7 @@ function Register() {
       const { confirmPassword, ...submitData } = formData;
       
       // 🟢 FIXED: Live Render URL
-      await axios.post('https://hostel-library-book-management.onrender.com/api/auth/register', submitData);
+      await axios.post('https://hostel-library-book-management-1.onrender.com/api/auth/register', submitData);
       
       alert("Registration Successful! Please Login.");
       navigate('/');
